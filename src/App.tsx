@@ -1,8 +1,11 @@
 import { AppRouter } from "./router/AppRouter"
+import { AppTheme } from "./theme"
 
 function App() {
   return (
-    <AppRouter />
+    <AppTheme>
+      <AppRouter />
+    </AppTheme>
   )
 }
 
