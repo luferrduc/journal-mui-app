@@ -1,5 +1,5 @@
 import { Link as RouterLink } from "react-router"
-import {  Link as LinkMUI, LinkProps as MuiLinkProps } from "@mui/material"
+import { Link as LinkMUI, LinkProps as MuiLinkProps } from "@mui/material"
 
 interface LinkProps extends MuiLinkProps  {
   text: string;
