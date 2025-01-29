@@ -16,7 +16,13 @@ export const JournalLayout = ({ children }: { children: ReactNode }) => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3
+          paddingX: {
+            xs: 0,
+            sm: 0,
+            md: 2,
+            lg: 3
+          },
+          paddingY: 3
         }}
       >
         <Toolbar />

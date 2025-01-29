@@ -7,7 +7,7 @@ export const Navbar = ({ drawerWidth }: { drawerWidth: number }) => {
     <AppBar 
       position="fixed"
       sx={{
-        width: { sm: `calc(100% - ${drawerWidth}px)` },
+        width: {xs: "100%", md: `calc(100% - ${drawerWidth}px)`},
         ml: { sm: `${drawerWidth}px` }
       }}
     >
@@ -17,7 +17,7 @@ export const Navbar = ({ drawerWidth }: { drawerWidth: number }) => {
           edge="start"
           sx={{
             mr: 2,
-            display: { sm: 'none' }
+            display: { md: 'none' }
           }}
         >
           <MenuOutlined/>

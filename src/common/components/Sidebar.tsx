@@ -9,7 +9,8 @@ export const Sidebar = ({ drawerWidth }: { drawerWidth: number }) => {
       component="nav"
       sx={{
         width: { sm: drawerWidth },
-        flexShrink: { sm: 0 }
+        flexShrink: { sm: 0 },
+        display: { xs: 'none', md: 'block' }
       }}
     >
       <Drawer
