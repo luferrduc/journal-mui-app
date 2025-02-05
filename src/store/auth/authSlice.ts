@@ -7,11 +7,11 @@ type Status = 'checking' | 'not-authenticated' | 'authenticated'
 
 export interface AuthState {
   status: Status,
-  uid: number | null
+  uid: string | null
   email: string | null
   displayName: string | null
   photoURL: string | null,
-  errorMessage: string | null
+  errorMessage?: string | null
 }
 
 const initialState: AuthState = {
@@ -27,14 +27,24 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<AuthState>) => {
-      
+    login: (state, action: PayloadAction<Omit<AuthState, "status">>) => {
+      state.status = 'authenticated'
+      state.uid = action.payload.uid
+      state.email = action.payload.email
+      state.displayName = action.payload.displayName
+      state.photoURL = action.payload.photoURL
+      state.errorMessage = null
     },
-    logout: (state, action: PayloadAction<AuthState>) => {
-
+    logout: (state, action: PayloadAction<Pick<AuthState, "errorMessage">>) => {
+      state.status = 'not-authenticated'
+      state.uid = null
+      state.email = null
+      state.displayName = null
+      state.photoURL = null
+      state.errorMessage = action.payload.errorMessage
     },
     checkingCredentials: (state) => {
-
+      state.status = 'checking'
     }
 
   },

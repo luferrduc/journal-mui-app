@@ -5,7 +5,8 @@ import { authSlice } from './auth'
 export const store = configureStore({
   reducer: {
     auth: authSlice.reducer
-  }
+  },
+  // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(todosApi.middleware)
 })
 
 // Infer the `RootState` and `AppDispatch` types from the store itself 
