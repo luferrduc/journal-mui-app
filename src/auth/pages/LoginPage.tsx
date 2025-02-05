@@ -5,10 +5,23 @@ import Grid from "@mui/material/Grid2"
 // import { Link } from "@mui/icons-material"
 import { Link } from "@/common/components/Link"
 import { AuthLayout } from "../layout/AuthLayout"
+import { useForm } from "@/hooks"
+import { FormEvent } from "react"
 
 
 
 export const LoginPage = () => {
+  
+  const { email, password, onInputChange, formState } = useForm<{email: string, password: string}>({
+    email: '',
+    password: ''
+  })
+
+  const onSubmit = (event: FormEvent) => {
+    event.preventDefault()
+    console.log(event.target)
+  }
+
   return (
     <AuthLayout title="Login">
       <form>
@@ -19,6 +32,10 @@ export const LoginPage = () => {
                 type="email"
                 placeholder="correo@gmail.com"
                 fullWidth
+                autoComplete="email"
+                name="email"
+                onChange={onInputChange}
+                value={email}
               />
             </Grid>
             <Grid size={12}>
@@ -27,6 +44,10 @@ export const LoginPage = () => {
                 type="password"
                 placeholder="Contraseña"
                 fullWidth
+                autoComplete="current-password"
+                name="password"
+                onChange={onInputChange}
+                value={password}
               />
             </Grid>
             <Grid container spacing={2} marginBottom={2} size={12}>
