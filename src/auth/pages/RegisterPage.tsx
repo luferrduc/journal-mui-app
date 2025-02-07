@@ -2,11 +2,50 @@ import { Button, TextField, Typography } from "@mui/material"
 import { AuthLayout } from "../layout/AuthLayout"
 import Grid from "@mui/material/Grid2"
 import { Link } from "@/common/components/Link"
+import { useForm } from "@/common/hooks"
+import { FormEvent, useState } from "react"
+
+
+const formData = {
+  fullName: '',
+  email: '',
+  password: ''
+}
+
+const formValidations = {
+  email: [
+    (value: string) => (value.trim() !== "" ? null : "El email es obligatorio"),
+    (value: string) => (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value) ? null : "Formato de email inválido")
+  ],
+  password: [
+    (value: string) => (value.trim() !== "" ? null : "La password es obligatoria"),
+    (value: string) => (value.length >= 6 ? null : "Debe tener al menos 6 caracteres"),
+    (value: string) => (/[A-Z]/.test(value) ? null : "Debe incluir una mayúscula"),
+    (value: string) => (/[a-z]/.test(value) ? null : "Debe incluir una minúscula"),
+    (value: string) => (/[0-9]/.test(value) ? null : "Debe incluir un número")
+  ],
+  fullName: [
+    (value: string) => (value.trim() !== "" ? null : "El nombre es obligatorio"),
+    (value: string) => (value.length >= 2 ? null : "Debe tener al menos 2 caracteres"),
+    (value: string) => (/^[a-zA-Z\s]+$/.test(value) ? null : "El nombre solo debe contener letras y espacios"),
+    (value: string) => (!/[!@#$%^&*()\-=_+{}[\]\\|;:'",.<>?/`~]/.test(value.trim()) ? null : "No debe tener caracteres especiales")
+  ]
+}
 
 export const RegisterPage = () => {
+
+  const [formSubmitted, setFormSubmitted] = useState(false)
+  const { email, fullName, password, onInputChange, formErrors } = useForm(formData, formValidations)
+
+  const onSubmitForm = (event: FormEvent) => {
+    event.preventDefault()
+    setFormSubmitted(true)
+    console.log(formErrors)
+    console.log({ email, fullName, password })
+  }
   return (
     <AuthLayout title="Crear cuenta">
-      <form>
+      <form onSubmit={onSubmitForm}>
           <Grid container gap="1rem" marginTop="1rem">
             <Grid size={12}>
               <TextField 
@@ -14,6 +53,11 @@ export const RegisterPage = () => {
                 type="text"
                 placeholder="John Doe"
                 fullWidth
+                name="fullName"
+                onChange={onInputChange}
+                value={fullName}
+                error={formErrors.fullName !== null && formSubmitted}
+                helperText={formSubmitted ? formErrors.fullName : ''}
               />
             </Grid>
             <Grid size={12}>
@@ -22,6 +66,11 @@ export const RegisterPage = () => {
                 type="email"
                 placeholder="correo@gmail.com"
                 fullWidth
+                name="email"
+                onChange={onInputChange}
+                value={email}
+                error={formErrors.email !== null && formSubmitted}
+                helperText={formSubmitted ? formErrors.email: ''}
               />
             </Grid>
             <Grid size={12}>
@@ -30,11 +79,16 @@ export const RegisterPage = () => {
                 type="password"
                 placeholder="Contraseña"
                 fullWidth
+                name="password"
+                onChange={onInputChange}
+                value={password}
+                error={formErrors.password !== null && formSubmitted}
+                helperText={formSubmitted ? formErrors.password : ''}
               />
             </Grid>
             <Grid container spacing={2} marginBottom={2} size={12}>
               <Grid size={12}>
-                <Button variant="contained" fullWidth>Register</Button>
+                <Button type="submit" variant="contained" fullWidth>Register</Button>
               </Grid>              
             </Grid>
             <Grid container direction='row'  size={12} sx={{

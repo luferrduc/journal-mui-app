@@ -6,7 +6,7 @@ import { Button, TextField, Typography } from "@mui/material"
 import Grid from "@mui/material/Grid2"
 import { Link } from "@/common/components/Link"
 import { AuthLayout } from "../layout/AuthLayout"
-import { useForm } from "@/hooks"
+import { useForm } from "@/common/hooks"
 import { useAppDispatch, useAppSelector } from "@/store/hooks"
 import { checkingAuthentication, startGoogleSignIn } from "@/store/auth"
 
