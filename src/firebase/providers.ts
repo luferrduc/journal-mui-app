@@ -1,5 +1,6 @@
-import { AuthError, getRedirectResult, GoogleAuthProvider, signInWithPopup, signInWithRedirect } from "firebase/auth";
+import { AuthError, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, updateProfile } from "firebase/auth";
 import { FirebaseAuth } from "./config";
+import { RegisterWithEmail } from "@/store/auth";
 
 
 const googleProvider = new GoogleAuthProvider()
@@ -33,6 +34,33 @@ export const signInWithGoogle = async () => {
     return {
       ok: false,
       errorMessage
+    }
+  }
+}
+
+
+
+export const registerWithEmailAndPassword = async ({ email, password, fullName }: RegisterWithEmail) => {
+  try {
+    const response = await createUserWithEmailAndPassword(FirebaseAuth, email, password)
+    const { uid, photoURL } = response.user
+
+    // TODO: actualizar el displayName en firebase
+    await updateProfile(FirebaseAuth.currentUser!, { displayName: fullName })
+
+    return {
+      ok: true,
+      uid,
+      photoURL,
+      displayName: fullName,
+      email
+    }
+
+  } catch (error) {
+    
+    return {
+      ok: false,
+      errorMessage: (error as Error).message
     }
   }
 }

@@ -1,9 +1,11 @@
-import { Button, TextField, Typography } from "@mui/material"
+import { FormEvent, useMemo, useState } from "react"
+import { Alert, Button, TextField, Typography } from "@mui/material"
 import { AuthLayout } from "../layout/AuthLayout"
 import Grid from "@mui/material/Grid2"
 import { Link } from "@/common/components/Link"
 import { useForm } from "@/common/hooks"
-import { FormEvent, useState } from "react"
+import { useAppDispatch, useAppSelector } from "@/store/hooks"
+import { startCreatingUserWithEmailAndPassword } from "@/store/auth"
 
 
 const formData = {
@@ -34,14 +36,21 @@ const formValidations = {
 
 export const RegisterPage = () => {
 
+  const dispatch = useAppDispatch()
+  const { status, errorMessage } = useAppSelector((state) => state.auth)
+
+  const isAuthenticating = useMemo(() => status === "checking", [status])
+
   const [formSubmitted, setFormSubmitted] = useState(false)
-  const { email, fullName, password, onInputChange, formErrors } = useForm(formData, formValidations)
+  const { email, fullName, password, onInputChange, formErrors, isFormValid } = useForm(formData, formValidations)
 
   const onSubmitForm = (event: FormEvent) => {
     event.preventDefault()
     setFormSubmitted(true)
-    console.log(formErrors)
-    console.log({ email, fullName, password })
+
+    if(!isFormValid) return
+
+    dispatch(startCreatingUserWithEmailAndPassword({ email, fullName, password }))
   }
   return (
     <AuthLayout title="Crear cuenta">
@@ -87,8 +96,13 @@ export const RegisterPage = () => {
               />
             </Grid>
             <Grid container spacing={2} marginBottom={2} size={12}>
+              <Grid size={12} display={errorMessage ? 'block': 'none'}>
+                <Alert severity="error">
+                  { errorMessage }
+                </Alert>
+              </Grid>
               <Grid size={12}>
-                <Button type="submit" variant="contained" fullWidth>Register</Button>
+                <Button type="submit" variant="contained" fullWidth disabled={isAuthenticating}>Register</Button>
               </Grid>              
             </Grid>
             <Grid container direction='row'  size={12} sx={{
