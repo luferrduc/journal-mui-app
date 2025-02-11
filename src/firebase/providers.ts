@@ -1,4 +1,4 @@
-import { AuthError, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, updateProfile } from "firebase/auth";
+import { AuthError, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, updateProfile } from "firebase/auth";
 import { FirebaseAuth } from "./config";
 import { RegisterWithEmail } from "@/store/auth";
 
@@ -64,3 +64,29 @@ export const registerWithEmailAndPassword = async ({ email, password, fullName }
     }
   }
 }
+
+
+export const signInEmailAndPassword = async ({ email, password }: Omit<RegisterWithEmail, "fullName">) => {
+  try {
+    const response = await signInWithEmailAndPassword(FirebaseAuth, email, password)
+
+    const { user } = response
+    const { displayName, photoURL, uid } = user
+
+    return {
+      ok: true,
+      uid,
+      photoURL,
+      displayName,
+      email
+    }
+  } catch (error) {
+    
+    return {
+      ok: false,
+      errorMessage: (error as Error).message
+    }
+  }
+}
+
+

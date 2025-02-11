@@ -2,22 +2,22 @@
 // import { Link } from "@mui/icons-material"
 import { FormEvent, useMemo } from "react"
 import { Google } from "@mui/icons-material"
-import { Button, TextField, Typography } from "@mui/material"
+import { Alert, Button, TextField, Typography } from "@mui/material"
 import Grid from "@mui/material/Grid2"
-import { Link } from "@/common/components/Link"
+import { Link } from "@/ui/components/Link"
 import { AuthLayout } from "../layout/AuthLayout"
 import { useForm } from "@/common/hooks"
 import { useAppDispatch, useAppSelector } from "@/store/hooks"
-import { checkingAuthentication, startGoogleSignIn } from "@/store/auth"
+import { startEmailAndPasswordSignIn, startGoogleSignIn } from "@/store/auth"
 
 
 
 export const LoginPage = () => {
 
   const dispatch = useAppDispatch()
-  const { status } = useAppSelector((state) => state.auth)
+  const { status, errorMessage } = useAppSelector((state) => state.auth)
 
-  const { email, password, onInputChange } = useForm<{email: string, password: string}>({
+  const { email, password, onInputChange,  } = useForm<{email: string, password: string}>({
     email: '',
     password: ''
   })
@@ -26,13 +26,14 @@ export const LoginPage = () => {
 
   const onSubmit = (event: FormEvent) => {
     event.preventDefault()
-    dispatch(checkingAuthentication(email, password))
+    dispatch(startEmailAndPasswordSignIn({ email, password }))
   }
 
   const onGoogleSignIn = () => {
-    console.log('onGoogleSignIn')
     dispatch(startGoogleSignIn())
   }
+
+
   return (
     <AuthLayout title="Login">
       <form onSubmit={onSubmit}>
@@ -62,6 +63,11 @@ export const LoginPage = () => {
               />
             </Grid>
             <Grid container spacing={2} marginBottom={2} size={12}>
+              <Grid size={12} display={errorMessage ? 'block': 'none'}>
+                <Alert severity="error">
+                  { errorMessage }
+                </Alert>
+              </Grid>
               <Grid size={{
                 xs: 12,
                 sm:6

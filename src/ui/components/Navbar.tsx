@@ -1,6 +1,8 @@
+import { FirebaseAuth } from "@/firebase/config"
 import { LogoutOutlined, MenuOutlined } from "@mui/icons-material"
 import { AppBar, IconButton, Toolbar, Typography } from "@mui/material"
 import Grid from "@mui/material/Grid2"
+import { signOut } from "firebase/auth"
 
 export const Navbar = ({ drawerWidth }: { drawerWidth: number }) => {
   return (
@@ -33,7 +35,7 @@ export const Navbar = ({ drawerWidth }: { drawerWidth: number }) => {
           size={12}
         >
           <Typography variant="h6" noWrap> Journal App</Typography>
-          <IconButton color="error">
+          <IconButton color="error" onClick={ () => signOut(FirebaseAuth)}>
             <LogoutOutlined />
           </IconButton>
         </Grid>

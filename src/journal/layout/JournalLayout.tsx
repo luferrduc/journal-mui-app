@@ -1,4 +1,4 @@
-import { Navbar, Sidebar } from "@/common/components"
+import { Navbar, Sidebar } from "@/ui/components"
 import { Box, Toolbar } from "@mui/material"
 import { ReactNode } from "react"
 

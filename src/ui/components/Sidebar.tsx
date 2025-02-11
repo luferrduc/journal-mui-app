@@ -1,9 +1,13 @@
+import { useAppSelector } from "@/store/hooks"
 import { TurnedInNot } from "@mui/icons-material"
 import { Box, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material"
 import Grid from "@mui/material/Grid2"
 
 
 export const Sidebar = ({ drawerWidth }: { drawerWidth: number }) => {
+
+  const { displayName } = useAppSelector(state => state.auth)
+
   return (
     <Box
       component="nav"
@@ -26,7 +30,7 @@ export const Sidebar = ({ drawerWidth }: { drawerWidth: number }) => {
             variant="h6"
             noWrap
           >
-            Luciano Ferrando
+            {displayName}
           </Typography>
         </Toolbar>
         <Divider />
