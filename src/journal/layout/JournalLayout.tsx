@@ -1,16 +1,18 @@
 import { Navbar, Sidebar } from "@/ui/components"
 import { Box, Toolbar } from "@mui/material"
-import { ReactNode } from "react"
+import { ReactNode, useState } from "react"
 
 const drawerWidth = 240
 
 export const JournalLayout = ({ children }: { children: ReactNode }) => {
+  const [isOpen, setIsOpen] = useState(false)
+
   return (
     <Box display="flex">
       
-      <Navbar drawerWidth={drawerWidth}/>
+      <Navbar drawerWidth={drawerWidth} setIsOpen={setIsOpen} isOpen={isOpen}/>
 
-      <Sidebar drawerWidth={drawerWidth}/>
+      <Sidebar drawerWidth={drawerWidth} isOpen={isOpen}/>
 
       <Box 
         component="main"

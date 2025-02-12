@@ -4,12 +4,23 @@ import { AppBar, IconButton, Toolbar, Typography } from "@mui/material"
 import Grid from "@mui/material/Grid2"
 import { signOut } from "firebase/auth"
 
-export const Navbar = ({ drawerWidth }: { drawerWidth: number }) => {
+
+interface Props {
+  drawerWidth: number
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
+  isOpen: boolean 
+}
+
+export const Navbar = ({ drawerWidth, setIsOpen, isOpen }: Props) => {
+  
+
+
+
   return (
     <AppBar 
       position="fixed"
       sx={{
-        width: {xs: "100%", md: `calc(100% - ${drawerWidth}px)`},
+        width: {xs: !isOpen ? '100%' : `calc(100% - ${drawerWidth}px)`, md: `calc(100% - ${drawerWidth}px)`},
         ml: { sm: `${drawerWidth}px` }
       }}
     >
@@ -21,6 +32,8 @@ export const Navbar = ({ drawerWidth }: { drawerWidth: number }) => {
             mr: 2,
             display: { md: 'none' }
           }}
+
+          onClick={() => setIsOpen(state => !state)}
         >
           <MenuOutlined/>
         </IconButton>

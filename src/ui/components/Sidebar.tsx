@@ -4,17 +4,18 @@ import { Box, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, Lis
 import Grid from "@mui/material/Grid2"
 
 
-export const Sidebar = ({ drawerWidth }: { drawerWidth: number }) => {
+export const Sidebar = ({ drawerWidth, isOpen }: { drawerWidth: number, isOpen: boolean }) => {
 
   const { displayName } = useAppSelector(state => state.auth)
 
+  // TODO: ajustar sidebar para que en pantallas xs y sm se comporte como flotante al estar open
   return (
     <Box
       component="nav"
       sx={{
         width: { sm: drawerWidth },
         flexShrink: { sm: 0 },
-        display: { xs: 'none', md: 'block' }
+        display: { xs: !isOpen ? 'none' : 'block', md: 'block' }
       }}
     >
       <Drawer
