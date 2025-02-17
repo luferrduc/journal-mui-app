@@ -1,11 +1,11 @@
 import { useAppSelector } from "@/store/hooks"
-import { TurnedInNot } from "@mui/icons-material"
-import { Box, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material"
+import { ChevronLeft, ChevronRight, TurnedInNot } from "@mui/icons-material"
+import { Box, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography, useTheme } from "@mui/material"
 import Grid from "@mui/material/Grid2"
 
 
 export const Sidebar = ({ drawerWidth, isOpen }: { drawerWidth: number, isOpen: boolean }) => {
-
+  // const theme = useTheme();
   const { displayName } = useAppSelector(state => state.auth)
 
   // TODO: ajustar sidebar para que en pantallas xs y sm se comporte como flotante al estar open
@@ -16,7 +16,9 @@ export const Sidebar = ({ drawerWidth, isOpen }: { drawerWidth: number, isOpen: 
         width: { sm: drawerWidth },
         flexShrink: { sm: 0 },
         display: { xs: !isOpen ? 'none' : 'block', md: 'block' }
+        
       }}
+      className="animate__animated animate__fadeIn animate__faster"
     >
       <Drawer
         variant="permanent" // temporary si queremos ocultarla
@@ -33,6 +35,9 @@ export const Sidebar = ({ drawerWidth, isOpen }: { drawerWidth: number, isOpen: 
           >
             {displayName}
           </Typography>
+          {/* <IconButton onClick={ () => {} }>
+            {theme.direction === 'ltr' ? <ChevronLeft /> : <ChevronRight />}
+          </IconButton> */}
         </Toolbar>
         <Divider />
         <List>
