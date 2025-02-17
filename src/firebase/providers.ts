@@ -90,3 +90,17 @@ export const signInEmailAndPassword = async ({ email, password }: Omit<RegisterW
 }
 
 
+export const logoutApp =  async () => {
+  try {
+    await FirebaseAuth.signOut()
+
+    return {
+      ok: true
+    }
+  } catch (error) {
+    return {
+      ok: false,
+      errorMessage: (error as Error).message
+    }
+  }
+} 

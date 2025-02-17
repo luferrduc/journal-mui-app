@@ -1,8 +1,8 @@
-import { FirebaseAuth } from "@/firebase/config"
+import { startLogout } from "@/store/auth"
+import { useAppDispatch } from "@/store/hooks"
 import { LogoutOutlined, MenuOutlined } from "@mui/icons-material"
 import { AppBar, IconButton, Toolbar, Typography } from "@mui/material"
 import Grid from "@mui/material/Grid2"
-import { signOut } from "firebase/auth"
 
 
 interface Props {
@@ -13,7 +13,12 @@ interface Props {
 
 export const Navbar = ({ drawerWidth, setIsOpen, isOpen }: Props) => {
   
+  const dispatch = useAppDispatch()
 
+  const onLogout = () => {
+    dispatch(startLogout())
+  }
+  
 
 
   return (
@@ -48,7 +53,7 @@ export const Navbar = ({ drawerWidth, setIsOpen, isOpen }: Props) => {
           size={12}
         >
           <Typography variant="h6" noWrap> Journal App</Typography>
-          <IconButton color="error" onClick={ () => signOut(FirebaseAuth)}>
+          <IconButton color="error" onClick={ () => onLogout()}>
             <LogoutOutlined />
           </IconButton>
         </Grid>

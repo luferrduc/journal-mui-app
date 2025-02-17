@@ -35,13 +35,13 @@ export const authSlice = createSlice({
       state.photoURL = action.payload.photoURL
       state.errorMessage = null
     },
-    logout: (state, action: PayloadAction<Pick<AuthState, "errorMessage">>) => {
+    logout: (state, action: PayloadAction<Pick<AuthState, "errorMessage"> | null | undefined>) => {
       state.status = 'not-authenticated'
       state.uid = null
       state.email = null
       state.displayName = null
       state.photoURL = null
-      state.errorMessage = action.payload.errorMessage
+      state.errorMessage = action.payload?.errorMessage
     },
     checkingCredentials: (state) => {
       state.status = 'checking'

@@ -4,20 +4,20 @@ import { ReactNode } from "react"
 
 export const AuthLayout = ({ children, title = '' }: { children: ReactNode, title: string }) => {
   return (
-    <Grid 
-    container
-    spacing={0}
-    direction="column"
-    alignItems="center"
-    justifyContent="center"
-    sx={{ 
-      minHeight: '100vh',
-      backgroundColor: 'primary.main',
-      padding: {
-        xs: 0,
-        sm: 4
-      }
-    }}
+    <Grid
+      container
+      spacing={0}
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      sx={{ 
+        minHeight: '100vh',
+        backgroundColor: 'primary.main',
+        padding: {
+          xs: 0,
+          sm: 4
+        }
+      }}
     >
       <Grid
         className="box-shadow"

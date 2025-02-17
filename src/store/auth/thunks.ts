@@ -1,4 +1,4 @@
-import { registerWithEmailAndPassword, signInEmailAndPassword, signInWithGoogle } from "@/firebase/providers"
+import { logoutApp, registerWithEmailAndPassword, signInEmailAndPassword, signInWithGoogle } from "@/firebase/providers"
 import { AppDispatch } from "../store"
 import { checkingCredentials, login, logout } from "./authSlice"
 import { RegisterWithEmail } from "./types"
@@ -47,5 +47,17 @@ export const startEmailAndPasswordSignIn = ({ email, password }: Omit<RegisterWi
     if(!result.ok) return dispatch(logout({ errorMessage: result.errorMessage! }))
 
     dispatch(login({ displayName: result.displayName!, email: result.email!, photoURL: result.photoURL!, uid: result.uid! }))
+  }
+}
+
+
+export const startLogout = () => {
+  return async (dispatch: AppDispatch) => {
+    // dispatch(checkingCredentials())
+
+    const result = await logoutApp()
+    if(!result.ok) return dispatch(logout({ errorMessage: result.errorMessage! }))
+
+    dispatch(logout())
   }
 }
