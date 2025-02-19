@@ -1,20 +1,12 @@
-import { useAppDispatch, useAppSelector } from "@/store/hooks"
-import { Note, startSetActiveNote } from "@/store/journal"
-import { TurnedInNot } from "@mui/icons-material"
-import { Box, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material"
-import Grid from "@mui/material/Grid2"
+import { SidebarItem } from "@/journal/components"
+import { useAppSelector } from "@/store/hooks"
+import { Box, Divider, Drawer, List, Toolbar, Typography } from "@mui/material"
 
 
 export const Sidebar = ({ drawerWidth, isOpen }: { drawerWidth: number, isOpen: boolean }) => {
 
-  const dispatch = useAppDispatch()
   const { displayName } = useAppSelector(state => state.auth)
   const { notes } = useAppSelector(state => state.journal)
-  
-  const onSetActiveNote = (note: Note) => {
-    dispatch(startSetActiveNote(note))
-  }
-
 
   // TODO: ajustar sidebar para que en pantallas xs y sm se comporte como flotante al estar open
   return (
@@ -46,21 +38,9 @@ export const Sidebar = ({ drawerWidth, isOpen }: { drawerWidth: number, isOpen: 
         </Toolbar>
         <Divider />
         <List>
-          {
-            // ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio']
-            notes
-            .map( note => (
-              <ListItem key={note.id} disablePadding>
-                <ListItemButton onClick={() => onSetActiveNote(note)}>
-                  <ListItemIcon>
-                    <TurnedInNot />
-                  </ListItemIcon>
-                  <Grid container>
-                    <ListItemText primary={note.title || "Lorem Title"}/>
-                    <ListItemText secondary={note.body || "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus ratione minima, mollitia maiores in assumenda natus quaerat aut sit accusamus."}/>
-                  </Grid>
-                </ListItemButton>
-              </ListItem>
+          {            
+            notes.map( note => (
+              <SidebarItem key={note.id} {...note}/>
             ))
           }
         </List>

@@ -1,2 +1,3 @@
-export { ImageGallery } from "./ImageGallery";
+export * from "./ImageGallery";
+export * from "./SidebarItem"
 
