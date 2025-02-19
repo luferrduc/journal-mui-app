@@ -46,10 +46,14 @@ export const journalSlice = createSlice({
       state.notes = action.payload
     },
     setSaving: (state) => {
-    
+      state.isSaving = true
     },
     updateNote: (state, action: PayloadAction<Note>) => {
-    
+      // state.notes.forEach( note => {
+      //   if(note.id == action.payload.id){
+
+      //   }
+      // })
     },
     deleteNoteById: (state, action: PayloadAction<Pick<Note, 'id'>>) => {
 

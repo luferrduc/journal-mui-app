@@ -43,6 +43,9 @@ export const useForm = <
     createValidations()
   }, [createValidations])
 
+  useEffect(() => {
+    setFormState(initialForm)
+  }, [initialForm])
 
   const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const input = event.target;
