@@ -1,12 +1,20 @@
-import { useAppSelector } from "@/store/hooks"
-import { ChevronLeft, ChevronRight, TurnedInNot } from "@mui/icons-material"
-import { Box, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography, useTheme } from "@mui/material"
+import { useAppDispatch, useAppSelector } from "@/store/hooks"
+import { Note, startSetActiveNote } from "@/store/journal"
+import { TurnedInNot } from "@mui/icons-material"
+import { Box, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material"
 import Grid from "@mui/material/Grid2"
 
 
 export const Sidebar = ({ drawerWidth, isOpen }: { drawerWidth: number, isOpen: boolean }) => {
-  // const theme = useTheme();
+
+  const dispatch = useAppDispatch()
   const { displayName } = useAppSelector(state => state.auth)
+  const { notes } = useAppSelector(state => state.journal)
+  
+  const onSetActiveNote = (note: Note) => {
+    dispatch(startSetActiveNote(note))
+  }
+
 
   // TODO: ajustar sidebar para que en pantallas xs y sm se comporte como flotante al estar open
   return (
@@ -35,22 +43,21 @@ export const Sidebar = ({ drawerWidth, isOpen }: { drawerWidth: number, isOpen: 
           >
             {displayName}
           </Typography>
-          {/* <IconButton onClick={ () => {} }>
-            {theme.direction === 'ltr' ? <ChevronLeft /> : <ChevronRight />}
-          </IconButton> */}
         </Toolbar>
         <Divider />
         <List>
           {
-            ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio'].map( text => (
-              <ListItem key={text} disablePadding>
-                <ListItemButton>
+            // ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio']
+            notes
+            .map( note => (
+              <ListItem key={note.id} disablePadding>
+                <ListItemButton onClick={() => onSetActiveNote(note)}>
                   <ListItemIcon>
                     <TurnedInNot />
                   </ListItemIcon>
                   <Grid container>
-                    <ListItemText primary={text}/>
-                    <ListItemText secondary={'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iusto, fuga!'}/>
+                    <ListItemText primary={note.title || "Lorem Title"}/>
+                    <ListItemText secondary={note.body || "Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus ratione minima, mollitia maiores in assumenda natus quaerat aut sit accusamus."}/>
                   </Grid>
                 </ListItemButton>
               </ListItem>

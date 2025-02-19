@@ -11,15 +11,18 @@ export interface Note {
   imagesUrls: string[] | []
 }
 
+export type NoteOptionalIdImages = Omit<Note, "id" | "imagesUrls"> & Partial<Pick<Note, "id" | "imagesUrls">>;
+
+
 export interface JournalState {
   isSaving: boolean
   messageSaved: string
-  notes: Note[] | []
+  notes: Note[]
   active: Note | null
 }
 
 const initialState: JournalState = {
-  isSaving: true,
+  isSaving: false,
   messageSaved: '',
   notes: [],
   active: null
@@ -29,14 +32,18 @@ export const journalSlice = createSlice({
   name: 'journal',
   initialState,
   reducers: {
+    savingNewNote: (state) => {
+      state.isSaving = true
+    },
     addNewEmptyNote: (state, action: PayloadAction<Note>) => {
-      state.notes = [...state.notes, action.payload]
+      state.notes.push(action.payload)
+      state.isSaving = false
     },
     setActiveNote: (state, action: PayloadAction<Note>) => {
       state.active = action.payload
     },
     setNotes: (state, action: PayloadAction<Note[]>) => {
-    
+      state.notes = action.payload
     },
     setSaving: (state) => {
     
@@ -51,5 +58,5 @@ export const journalSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { addNewEmptyNote, deleteNoteById, setActiveNote, setNotes, setSaving, updateNote } = journalSlice.actions
+export const { addNewEmptyNote, deleteNoteById, setActiveNote, setNotes, setSaving, updateNote, savingNewNote } = journalSlice.actions
 // export const selectTemplate = (state: RootState) => state.
