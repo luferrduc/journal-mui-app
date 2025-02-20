@@ -1,13 +1,13 @@
-import { SaveOutlined } from "@mui/icons-material"
+import { ChangeEvent, useEffect, useMemo } from "react"
+import { toast } from "sonner"
+import { format } from "@formkit/tempo"
+import { CloudUpload, SaveOutlined } from "@mui/icons-material"
 import { Button, TextField, Typography } from "@mui/material"
 import Grid from "@mui/material/Grid2"
 import { ImageGallery } from "../components"
 import { useAppDispatch, useAppSelector } from "@/store/hooks"
-import { format } from "@formkit/tempo"
 import { useForm } from "@/common/hooks"
-import { useEffect, useMemo } from "react"
-import { Note, setActiveNote, startUpdateNote } from "@/store/journal"
-import { toast } from "sonner"
+import { Note, setActiveNote, startUpdateNote, startUploadingFiles } from "@/store/journal"
 
 export const NoteView = () => {
 
@@ -38,6 +38,11 @@ export const NoteView = () => {
     dispatch(startUpdateNote())
   }
 
+  const onInputFileChange = ({ target }: ChangeEvent<HTMLInputElement> ) => {
+    if(target.files === null) return
+
+    dispatch(startUploadingFiles(target.files))
+  }
   
   return (
     <Grid 
@@ -48,6 +53,40 @@ export const NoteView = () => {
         <Typography fontSize={39} fontWeight="light">
           {formatedDate}
         </Typography>
+       <Grid>
+        {/*
+          //* Otra forma para hacer el input
+          //* es crear el input, hacerlo display none
+          //* crear otro botón, y hacer la referencia hacia
+          //* el input file usando useRef y simular el click desde el botón
+         */}
+       <Button
+          component="label"
+          role={undefined}
+          variant="contained"
+          tabIndex={-1}
+          startIcon={<CloudUpload />}
+          disabled={isSaving}
+        >
+          Upload files
+          <input
+            type="file"
+            onChange={onInputFileChange}
+            multiple
+            style={{
+              clip: 'rect(0 0 0 0)',
+              clipPath: 'inset(50%)',
+              height: 1,
+              overflow: 'hidden',
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              whiteSpace: 'nowrap',
+              width: 1,
+          }}
+          disabled={isSaving}
+          />
+        </Button>
         <Button 
           disabled={isSaving}
           onClick={onSaveNote}
@@ -57,6 +96,7 @@ export const NoteView = () => {
           <SaveOutlined sx={{ fontSize: 30, mr: 1 }} />
           Guardar
         </Button>
+       </Grid>
       </Grid>
 
       <Grid size={12}>
@@ -86,7 +126,7 @@ export const NoteView = () => {
       </Grid>
 
       {/* Galería de imagenes */}
-      <ImageGallery />
+      <ImageGallery images={note?.imagesUrls ?? []}/>
     </Grid>
   )
 }

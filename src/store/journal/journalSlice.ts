@@ -1,4 +1,3 @@
-// import { RootState } from '...'
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
@@ -18,7 +17,6 @@ export interface NoteUpdate {
   date: number
   imagesUrls?: string[] | []
 }
-
 
 
 export type NoteOptionalIdImages = Omit<Note, "id" | "imagesUrls"> & Partial<Pick<Note, "id" | "imagesUrls">>;
@@ -68,6 +66,17 @@ export const journalSlice = createSlice({
 
       state.messageSaved = `La nota con título ${action.payload.title} fue actualizada correctamente`
     },
+    setPhotosToActiveNote: (state, action: PayloadAction<Note['imagesUrls']>) => {
+      if(!state.active) return
+      state.active.imagesUrls = [...(state.active?.imagesUrls ?? []), ...action.payload]
+      state.isSaving = false
+    },
+    clearNotesLogout: (state) => {
+      state.isSaving = false
+      state.messageSaved = ''
+      state.notes = []
+      state.active = null
+    },
     deleteNoteById: (state, action: PayloadAction<Pick<Note, 'id'>>) => {
 
     },
@@ -75,5 +84,15 @@ export const journalSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { addNewEmptyNote, deleteNoteById, setActiveNote, setNotes, setSaving, updateNote, savingNewNote } = journalSlice.actions
+export const { 
+  addNewEmptyNote, 
+  deleteNoteById, 
+  setActiveNote, 
+  setNotes, 
+  setSaving, 
+  updateNote, 
+  savingNewNote, 
+  setPhotosToActiveNote,
+  clearNotesLogout
+} = journalSlice.actions
 // export const selectTemplate = (state: RootState) => state.

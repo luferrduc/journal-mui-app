@@ -2,6 +2,7 @@ import { logoutApp, registerWithEmailAndPassword, signInEmailAndPassword, signIn
 import { AppDispatch } from "../store"
 import { checkingCredentials, login, logout } from "./authSlice"
 import { RegisterWithEmail } from "./types"
+import { clearNotesLogout } from "../journal"
 
 // TODO: Intentar llevarlo con el createAsyncThunk
 
@@ -58,6 +59,7 @@ export const startLogout = () => {
     const result = await logoutApp()
     if(!result.ok) return dispatch(logout({ errorMessage: result.errorMessage! }))
 
+    dispatch(clearNotesLogout())
     dispatch(logout())
   }
 }

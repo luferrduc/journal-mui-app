@@ -13,6 +13,7 @@ export const AppTheme = ({ children }: {children: ReactNode}) => {
       <Toaster
         richColors  
         position="top-right"
+        duration={500}
         // theme={purpleTheme.palette.mode === "dark" ? "dark" : "light"}
         // toastOptions={{
         //   style: {
