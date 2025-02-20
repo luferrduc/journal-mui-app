@@ -7,11 +7,12 @@ import { format } from "@formkit/tempo"
 import { useForm } from "@/common/hooks"
 import { useEffect, useMemo } from "react"
 import { Note, setActiveNote, startUpdateNote } from "@/store/journal"
+import { toast } from "sonner"
 
 export const NoteView = () => {
 
   const dispatch = useAppDispatch()
-  const { active: note } = useAppSelector(state => state.journal)
+  const { active: note, messageSaved, isSaving } = useAppSelector(state => state.journal)
 
   // Formatear la fecha
   const { title, body, onInputChange, date, debouncedFormState} = useForm(note)
@@ -25,12 +26,19 @@ export const NoteView = () => {
     dispatch(setActiveNote(debouncedFormState as Note))
   }, [debouncedFormState])
   
+  useEffect(() => {
+    if(messageSaved.length > 0){
+      toast.success('Nota actualizada', {
+        description: messageSaved,
+      })
+    }
+  }, [messageSaved])
 
   const onSaveNote = () => {
-
     dispatch(startUpdateNote())
   }
 
+  
   return (
     <Grid 
       className="animate__animated animate__fadeIn animate__faster"
@@ -41,6 +49,7 @@ export const NoteView = () => {
           {formatedDate}
         </Typography>
         <Button 
+          disabled={isSaving}
           onClick={onSaveNote}
           color="primary" 
           sx={{ paddingX: 2, paddingY: 1 }}

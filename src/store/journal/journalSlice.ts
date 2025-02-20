@@ -51,13 +51,14 @@ export const journalSlice = createSlice({
     },
     setActiveNote: (state, action: PayloadAction<Note>) => {
       state.active = action.payload
+      state.messageSaved = ''
     },
     setNotes: (state, action: PayloadAction<Note[]>) => {
       state.notes = action.payload
     },
     setSaving: (state) => {
       state.isSaving = true
-      // TODO: mensaje de error
+      state.messageSaved = ''
     },
     updateNote: (state, action: PayloadAction<Note>) => {
       state.isSaving = false
@@ -65,7 +66,7 @@ export const journalSlice = createSlice({
       const noteIndex = state.notes.findIndex(note => note.id === action.payload.id)
       if(noteIndex >= 0) state.notes[noteIndex] = action.payload
 
-      // TODO: Mostrar mensaje de actualización
+      state.messageSaved = `La nota con título ${action.payload.title} fue actualizada correctamente`
     },
     deleteNoteById: (state, action: PayloadAction<Pick<Note, 'id'>>) => {
 
