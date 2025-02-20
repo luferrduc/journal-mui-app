@@ -11,6 +11,7 @@ export const useForm = <
   ) => {
   const [formState, setFormState] = useState<T>(initialForm)
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof T, string | null>>>({});
+  const [debouncedFormState, setDebouncedFormState] = useState<T>(initialForm);
 
   const isFormValid = useMemo( () => {
     for (const formValue of Object.keys(formErrors)) {
@@ -47,28 +48,25 @@ export const useForm = <
     setFormState(initialForm)
   }, [initialForm])
 
-  const onInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedFormState(formState);
+    }, 500)
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [formState]);
+
+  const onInputChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     const input = event.target;
     const { value, name } = input;
     setFormState(prev => ({
       ...prev,
         [name]: value
     }))
-
-    // if (formValidations && formValidations[name as keyof T]) {
-    //   const validationFns = formValidations[name as keyof T] || [];
-    //   const errorMessage = (validationFns as ((value: string | T[keyof T]) => string | null)[])
-    //     .map(fn => fn(value))
-    //     .find(error => error !== null) || null;
-
-    //   setFormErrors(prev => ({
-    //     ...prev,
-    //     [name]: errorMessage
-    //   }))
-    // }
-
-    // console.log(formErrors)
-  }
+  }, [])
 
   
   const onResetForm = () => {
@@ -83,6 +81,7 @@ export const useForm = <
     onInputChange,
     onResetForm,
     formErrors,
-    isFormValid
+    isFormValid,
+    debouncedFormState
   }
 }

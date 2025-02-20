@@ -11,6 +11,16 @@ export interface Note {
   imagesUrls: string[] | []
 }
 
+export interface NoteUpdate {
+  id?: string
+  title: string
+  body: string
+  date: number
+  imagesUrls?: string[] | []
+}
+
+
+
 export type NoteOptionalIdImages = Omit<Note, "id" | "imagesUrls"> & Partial<Pick<Note, "id" | "imagesUrls">>;
 
 
@@ -47,13 +57,15 @@ export const journalSlice = createSlice({
     },
     setSaving: (state) => {
       state.isSaving = true
+      // TODO: mensaje de error
     },
     updateNote: (state, action: PayloadAction<Note>) => {
-      // state.notes.forEach( note => {
-      //   if(note.id == action.payload.id){
+      state.isSaving = false
 
-      //   }
-      // })
+      const noteIndex = state.notes.findIndex(note => note.id === action.payload.id)
+      if(noteIndex >= 0) state.notes[noteIndex] = action.payload
+
+      // TODO: Mostrar mensaje de actualización
     },
     deleteNoteById: (state, action: PayloadAction<Pick<Note, 'id'>>) => {
 

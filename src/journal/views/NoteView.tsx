@@ -2,21 +2,34 @@ import { SaveOutlined } from "@mui/icons-material"
 import { Button, TextField, Typography } from "@mui/material"
 import Grid from "@mui/material/Grid2"
 import { ImageGallery } from "../components"
-import { useAppSelector } from "@/store/hooks"
+import { useAppDispatch, useAppSelector } from "@/store/hooks"
 import { format } from "@formkit/tempo"
 import { useForm } from "@/common/hooks"
-import { useMemo } from "react"
+import { useEffect, useMemo } from "react"
+import { Note, setActiveNote, startUpdateNote } from "@/store/journal"
 
 export const NoteView = () => {
 
+  const dispatch = useAppDispatch()
   const { active: note } = useAppSelector(state => state.journal)
+
   // Formatear la fecha
-  const { title, body, onInputChange, date, formState } = useForm(note)
+  const { title, body, onInputChange, date, debouncedFormState} = useForm(note)
+
   const formatedDate = useMemo(() => {
     const newDate = new Date(date)
     return newDate ? format(newDate, "long") : newDate
   }, [date])
 
+  useEffect(() => {
+    dispatch(setActiveNote(debouncedFormState as Note))
+  }, [debouncedFormState])
+  
+
+  const onSaveNote = () => {
+
+    dispatch(startUpdateNote())
+  }
 
   return (
     <Grid 
@@ -27,7 +40,11 @@ export const NoteView = () => {
         <Typography fontSize={39} fontWeight="light">
           {formatedDate}
         </Typography>
-        <Button color="primary" sx={{ paddingX: 2, paddingY: 1 }}>
+        <Button 
+          onClick={onSaveNote}
+          color="primary" 
+          sx={{ paddingX: 2, paddingY: 1 }}
+          >
           <SaveOutlined sx={{ fontSize: 30, mr: 1 }} />
           Guardar
         </Button>
