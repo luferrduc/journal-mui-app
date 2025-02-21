@@ -1,13 +1,13 @@
 import { ChangeEvent, useEffect, useMemo } from "react"
 import { toast } from "sonner"
 import { format } from "@formkit/tempo"
-import { CloudUpload, SaveOutlined } from "@mui/icons-material"
+import { CloudUpload, DeleteOutline, SaveOutlined } from "@mui/icons-material"
 import { Button, TextField, Typography } from "@mui/material"
 import Grid from "@mui/material/Grid2"
 import { ImageGallery } from "../components"
 import { useAppDispatch, useAppSelector } from "@/store/hooks"
 import { useForm } from "@/common/hooks"
-import { Note, setActiveNote, startUpdateNote, startUploadingFiles } from "@/store/journal"
+import { Note, setActiveNote, startDeletingNote, startUpdateNote, startUploadingFiles } from "@/store/journal"
 
 export const NoteView = () => {
 
@@ -28,14 +28,27 @@ export const NoteView = () => {
   
   useEffect(() => {
     if(messageSaved.length > 0){
-      toast.success('Nota actualizada', {
-        description: messageSaved,
-      })
+      if(messageSaved.includes('actualizada')){
+        toast.success('Nota actualizada', {
+          description: messageSaved,
+        })
+      }
+
+      if(messageSaved.includes('eliminada')){
+        toast.success('Nota eliminada', {
+          description: messageSaved,
+        })
+      }
     }
   }, [messageSaved])
 
   const onSaveNote = () => {
     dispatch(startUpdateNote())
+  }
+
+  const onDelete = () => {
+
+    dispatch(startDeletingNote())
   }
 
   const onInputFileChange = ({ target }: ChangeEvent<HTMLInputElement> ) => {
@@ -124,7 +137,16 @@ export const NoteView = () => {
           onChange={onInputChange}
         />
       </Grid>
-
+      <Grid container justifyContent='end'>
+          <Button
+            onClick={onDelete}
+            sx={{ mt: 2 }}
+            color="error"
+          >
+            <DeleteOutline />
+            Borrar
+          </Button>
+      </Grid>
       {/* Galería de imagenes */}
       <ImageGallery images={note?.imagesUrls ?? []}/>
     </Grid>

@@ -1,6 +1,6 @@
-import { collection, doc, setDoc } from "firebase/firestore/lite"
+import { collection, deleteDoc, doc, setDoc } from "firebase/firestore/lite"
 import { AppDispatch, RootState } from "../store"
-import { addNewEmptyNote, Note, NoteOptionalIdImages, NoteUpdate, savingNewNote, setActiveNote, setNotes, setPhotosToActiveNote, setSaving, updateNote } from "./journalSlice"
+import { addNewEmptyNote, deleteNoteById, Note, NoteOptionalIdImages, NoteUpdate, savingNewNote, setActiveNote, setNotes, setPhotosToActiveNote, setSaving, updateNote } from "./journalSlice"
 import { FirebaseDB } from "@/firebase/config"
 import { fileUpload, loadNotes } from "@/journal/helpers"
 
@@ -89,11 +89,25 @@ export const startUploadingFiles = (files: FileList) => {
     for (const file of files) {
       fileUploadPromises.push(fileUpload(file))
     }
-
     const imgsUrls = await Promise.all(fileUploadPromises)
-    console.log(imgsUrls)
-
     dispatch(setPhotosToActiveNote(imgsUrls))
 
+  }
+}
+
+export const startDeletingNote = () => {
+  return async (dispatch: AppDispatch, getState: () => RootState) => {
+
+    const { uid } = getState().auth
+    const { active: note } = getState().journal
+
+    if(!uid) throw new Error('El uid del usuario no existe')
+    if(!note) throw new Error('No hay una nota activa para eliminar')
+
+    const docRef = doc(FirebaseDB, `${uid}/journal/notes/${note.id}`)
+
+    await deleteDoc(docRef)
+
+    dispatch(deleteNoteById(note.id))
   }
 }
